@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE SASQUATCH TRACKER - Central Database</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&family=Verdana&display=swap" rel="stylesheet">
+    <style>
+        :root { --wiki-bg: #ffffff; --wiki-border: #dcdcdc; --wiki-header: #f2f2f2; --text-color: #333; --link-color: #b01; }
+        body { background-color: #f9f9f9; color: var(--text-color); font-family: 'Verdana', sans-serif; margin: 0; padding: 20px; line-height: 1.6; }
+        #container { max-width: 1000px; margin: 0 auto; border: 1px solid var(--wiki-border); background-color: var(--wiki-bg); padding: 40px; box-shadow: 2px 2px 10px rgba(0,0,0,0.05); }
+        header { border-bottom: 3px solid #b01; margin-bottom: 20px; padding-bottom: 15px; }
+        h1 { color: #000; text-transform: none; margin: 0; font-size: 2.5em; border: none; }
+        .subtitle { font-style: italic; color: #666; font-size: 0.9em; }
+        .status-bar { background: #eee; font-size: 0.85em; padding: 8px; border: 1px solid #ddd; margin: 20px 0; border-left: 5px solid #b01; }
+        nav { margin-bottom: 30px; }
+        button { background: #f0f0f0; border: 1px solid #ccc; padding: 6px 12px; cursor: pointer; font-size: 0.9em; border-radius: 3px; }
+        button:hover { background: #e0e0e0; }
+        #content { min-height: 400px; }
+        .file-link { display: block; color: var(--link-color); text-decoration: none; padding: 5px 0; font-weight: bold; border-bottom: 1px solid #eee; }
+        .file-link:hover { text-decoration: underline; background: #fff5f5; }
+        footer { margin-top: 50px; font-size: 0.8em; color: #888; text-align: center; border-top: 1px solid #eee; padding-top: 20px; }
+    </style>
+</head>
+<body>
+<div id="container">
+    <header>
+        <h1>THE SASQUATCH TRACKER</h1>
+        <p class="subtitle">North American Cryptozoology & Field Research Bureau</p>
+    </header>
+    <div class="status-bar">NETWORK STATUS: STABLE | USER: FIELD_AGENT_2013 | LICENSE: CC-BY-4.0</div>
+    <nav>
+        <button onclick="loadFileList()">[ ACCESS FIELD REPORTS ]</button>
+        <button onclick="location.reload()">[ MAIN HUB ]</button>
+    </nav>
+    <div id="content">
+        <h2>WELCOME TO THE BUREAU</h2>
+        <p>This database contains classified information regarding <strong>Bigfoot subspecies</strong>, hunting protocols, and conservation status.</p>
+        <hr>
+        <h3>Database Categories:</h3>
+        <ul>
+            <li><strong>Subjects:</strong> Different species of Hominids found in the wild.</li>
+            <li><strong>Manuals:</strong> Tracking techniques, gear lists, and survival guides.</li>
+            <li><strong>Status Levels:</strong> LC (Least Concern) to EX (Extinct in Wild).</li>
+        </ul>
+    </div>
+    <footer>
+        <p>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" style="color: #888;">Creative Commons Attribution 4.0</a>.</p>
+    </footer>
+</div>
+
+<script>
+    const GITHUB_USER = 'stormwindsky';
+    const GITHUB_REPO = 'SASQUATCH-TRACKER'; // Changez ceci pour votre nouveau repo
+    const FOLDER_PATH = 'Subjects';
+
+    async function loadFileList() {
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '<p>Retrieving data from secure server...</p>';
+        try {
+            const response = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FOLDER_PATH}`);
+            const files = await response.json();
+            
+            let html = "<h2>FIELD REPORTS & ENTRIES</h2>";
+            files.forEach(file => {
+                if (file.name.endsWith('.md')) {
+                    const displayName = file.name.replace('.md', '').toUpperCase();
+                    html += `<a class="file-link" href="Subject.html?=${file.name}">• REPORT_${displayName}</a>`;
+                }
+            });
+            contentDiv.innerHTML = html;
+        } catch (e) {
+            contentDiv.innerHTML = "<p style='color:red'>ERROR: DATABASE UNREACHABLE.</p>";
+        }
+    }
+</script>
+</body>
+</html>

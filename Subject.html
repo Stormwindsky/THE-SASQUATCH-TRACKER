@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Report - SASQUATCH TRACKER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { background-color: #f9f9f9; color: #333; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 20px; }
+        #container { max-width: 900px; margin: 0 auto; border: 1px solid #dcdcdc; background-color: #fff; padding: 30px; }
+        header { border-bottom: 2px solid #b01; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; }
+        h1 { color: #b01; font-size: 1.5em; margin: 0; }
+        .back-btn { color: #666; text-decoration: none; font-size: 0.8em; }
+        #file-content { padding: 10px; line-height: 1.6; }
+        /* Wikidot Style Markdown */
+        h1, h2 { color: #b01; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+        blockquote { border-left: 4px solid #ddd; padding-left: 15px; color: #555; font-style: italic; margin: 20px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        table, th, td { border: 1px solid #ddd; padding: 10px; }
+        th { background: #f2f2f2; }
+        footer { margin-top: 50px; font-size: 0.8em; color: #999; text-align: center; }
+    </style>
+</head>
+<body>
+<div id="container">
+    <header>
+        <h1>BUREAU_ARCHIVE</h1>
+        <a href="index.html" class="back-btn">← BACK TO LIST</a>
+    </header>
+    <div id="file-content">
+        <p>Deciphering entry...</p>
+    </div>
+    <footer>
+        <p>Copyright 2013-2026 Sasquatch Tracker Bureau - Licensed CC-BY-4.0</p>
+    </footer>
+</div>
+
+<script>
+    const GITHUB_USER = 'stormwindsky';
+    const GITHUB_REPO = 'SASQUATCH-TRACKER';
+    
+    async function loadSubject() {
+        const urlParams = window.location.search;
+        const fileName = urlParams.split('?=')[1];
+
+        if (!fileName) {
+            document.getElementById('file-content').innerHTML = "ERROR: FILE NOT SPECIFIED.";
+            return;
+        }
+
+        try {
+            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/Subjects/${fileName}`;
+            const response = await fetch(rawUrl);
+            const markdown = await response.text();
+            document.getElementById('file-content').innerHTML = marked.parse(markdown);
+        } catch (e) {
+            document.getElementById('file-content').innerHTML = "SYSTEM ERROR: FILE CORRUPTED OR MISSING.";
+        }
+    }
+    window.onload = loadSubject;
+</script>
+</body>
+</html>
